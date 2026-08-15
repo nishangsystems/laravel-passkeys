@@ -3,6 +3,5 @@
 /.phpunit.cache
 /.idea
 /.vscode
-/composer.lock
 /.env
 .DS_Store

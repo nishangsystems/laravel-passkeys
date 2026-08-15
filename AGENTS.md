@@ -15,6 +15,19 @@ This file is a reference for AI coding agents working on the `nishangsystems/lar
 - **Service provider auto-discovery:** `NishangSystems\Passkeys\PasskeysServiceProvider`
 - **Facade alias:** `Passkey` → `NishangSystems\Passkeys\Facades\Passkey`
 
+## Quick Commands
+
+```bash
+composer test          # clears config cache, runs PHPUnit with coverage
+composer pint          # PSR-12 lint check (no changes)
+composer pint:fix      # PSR-12 auto-fix
+composer phpcs         # PHP_CodeSniffer check
+composer phpcs:fix     # PHP_CodeSniffer auto-fix
+composer phpstan       # Larastan level 5, 2GB memory, app/ only
+composer phpmd         # PHP Mess Detector on app/
+```
+
+
 ## Directory structure
 
 ```
@@ -283,3 +296,6 @@ refactor(staff): Replace staff type model with enum
     - Max public methods: 20
 - `app/Http/Resources/*` excluded from phpstan analysis.
 - `StaticAccess`, `ElseExpression`, `CouplingBetweenObjects` (raised to 50) excluded in phpmd.
+
+## Note
+Never commit or push to the git repository without the user's acknowledgment.
