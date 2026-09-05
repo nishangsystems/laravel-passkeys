@@ -15,16 +15,6 @@ return [
     */
     'user_model' => env('PASSKEY_USER_MODEL', App\Models\User::class),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Guard
-    |--------------------------------------------------------------------------
-    |
-    | The guard used to protect passkey management routes (register, list, delete).
-    | Login routes are public by design.
-    |
-    */
-    'guard' => env('PASSKEY_GUARD', 'web'),
 
     /*
     |--------------------------------------------------------------------------

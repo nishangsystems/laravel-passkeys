@@ -40,7 +40,6 @@ abstract class TestCase extends BaseTestCase
 
         $app['config']->set('cache.default', 'array');
         $app['config']->set('passkeys.user_model', TestUser::class);
-        $app['config']->set('passkeys.guard', 'web');
         $app['config']->set('passkeys.allowed_origins', [
             'http://localhost',
             'http://localhost:8000',

@@ -4,7 +4,6 @@ namespace NishangSystems\Passkeys\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -138,10 +137,6 @@ class PasskeyController
             if (!$this->userCanAuthenticate($user)) {
                 return $this->failure(__('passkeys.invalid_credentials'), 401);
             }
-
-            $guard = config('passkeys.guard', 'web');
-            Auth::guard($guard)->login($user);
-
             $responseData = ['user' => $user];
 
             if (method_exists($user, 'createToken')) {

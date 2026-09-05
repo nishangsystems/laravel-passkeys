@@ -108,7 +108,6 @@ The route prefix is controlled by `passkeys.routes.prefix`.
 - Uses `RespondsWithJson` for a consistent `{success, message, data/errors}` envelope.
 - Generates a UUID-based cache key for each WebAuthn ceremony and stores the serialized options for 5 minutes.
 - Delegates all WebAuthn validation to `PasskeyService`.
-- Logs the user in using the configured guard (`passkeys.guard`, default `web`).
 - If the user model has a `createToken` method (e.g. Sanctum), it includes a Bearer token in the login response.
 
 ### Service layer
@@ -141,7 +140,6 @@ All settings live in `config/passkeys.php` and can be overridden via environment
 | Config key | Environment variable | Default | Purpose |
 |---|---|---|---|
 | `user_model` | `PASSKEY_USER_MODEL` | `App\Models\User` | Eloquent model that owns passkeys |
-| `guard` | `PASSKEY_GUARD` | `web` | Guard protecting management routes |
 | `user_lookup_field` | `PASSKEY_USER_LOOKUP_FIELD` | `email` | Column used to look up users at login |
 | `rp_id` | `PASSKEY_RP_ID` | `null` | WebAuthn relying party ID |
 | `rp_name` | `PASSKEY_RP_NAME` | `config('app.name')` | WebAuthn relying party name |
@@ -238,7 +236,7 @@ When modifying or extending the package, keep the following in mind:
 ## Common tasks
 
 - **Add a new translation message:** edit `resources/lang/en/passkeys.php` and use `__('passkeys.key')` in code.
-- **Change user model/guard:** update `.env` values (`PASSKEY_USER_MODEL`, `PASSKEY_GUARD`) or publish and edit `config/passkeys.php`.
+- **Change user model:** update `.env` value (`PASSKEY_USER_MODEL`) or publish and edit `config/passkeys.php`.
 - **Disable package routes:** set `PASSKEY_ROUTES_ENABLED=false` and register your own routes using `NishangSystems\Passkeys\Http\Controllers\PasskeyController`.
 - **Add attestation support:** set `PASSKEY_ATTESTATIONS=packed,fido` and ensure the COSE/PKI dependencies are satisfied.
 

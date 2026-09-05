@@ -33,25 +33,23 @@ php artisan migrate
 
 All package settings can be controlled via environment variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PASSKEY_USER_MODEL` | `App\Models\User` | Eloquent model that owns passkeys |
-| `PASSKEY_GUARD` | `web` | Authentication guard |
-| `PASSKEY_USER_LOOKUP_FIELD` | `email` | Column used to look up users |
-| `PASSKEY_RP_ID` | `null` | WebAuthn relying party ID |
-| `PASSKEY_RP_NAME` | `config('app.name')` | WebAuthn relying party name |
-| `PASSKEY_ALLOWED_ORIGINS` | `http://localhost,...` | Comma separated allowed origins |
-| `PASSKEY_ATTESTATIONS` | *(empty)* | Comma separated attestation types |
-| `PASSKEY_ROUTES_ENABLED` | `true` | Whether package routes are registered |
-| `PASSKEY_ROUTE_PREFIX` | *(empty)* | Route prefix |
-| `PASSKEY_ROUTE_MIDDLEWARE` | `api` | Comma separated public route middleware |
-| `PASSKEY_ROUTE_AUTH_MIDDLEWARE` | `auth` | Comma separated protected route middleware |
+| Variable | Default | Example | Description |
+|----------|---------|---------|-------------|
+| `PASSKEY_USER_MODEL` | `App\Models\User` | `App\Models\Staff` | Eloquent model that owns passkeys |
+| `PASSKEY_USER_LOOKUP_FIELD` | `email` | `username` | Column used to look up users |
+| `PASSKEY_RP_ID` | `null` | `example.com` | WebAuthn relying party ID |
+| `PASSKEY_RP_NAME` | `config('app.name')` | `My App` | WebAuthn relying party name |
+| `PASSKEY_ALLOWED_ORIGINS` | `http://localhost,...` | `https://app.example.com,http://localhost:5173` | Comma separated allowed origins |
+| `PASSKEY_ATTESTATIONS` | *(empty)* | `packed,fido` | Comma separated attestation types |
+| `PASSKEY_ROUTES_ENABLED` | `true` | `true` | Whether package routes are registered |
+| `PASSKEY_ROUTE_PREFIX` | *(empty)* | `api/v1` | Route prefix |
+| `PASSKEY_ROUTE_MIDDLEWARE` | `api` | `api,throttle:60,1` | Comma separated public route middleware |
+| `PASSKEY_ROUTE_AUTH_MIDDLEWARE` | `auth` | `auth:sanctum` | Comma separated protected route middleware |
 
 Example `.env` entries:
 
 ```dotenv
 PASSKEY_USER_MODEL=App\Models\Staff
-PASSKEY_GUARD=staff-api
 PASSKEY_ALLOWED_ORIGINS="http://localhost,https://app.example.com"
 PASSKEY_ATTESTATIONS="packed"
 ```
