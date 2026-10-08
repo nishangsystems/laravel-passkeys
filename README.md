@@ -89,7 +89,7 @@ You can prevent disabled or terminated users from logging in by setting a callab
 ```php
 'user_active_check' => fn ($user) => $user->isActive(),
 // or
-'user_active_check' => 'isActive',
+'user_active_check' => 'isActive', // this will call $user->isActive()
 ```
 
 ### Get Authenticated User
