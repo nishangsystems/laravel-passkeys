@@ -15,11 +15,13 @@ use NishangSystems\Passkeys\Http\Requests\VerifyPasskeyRequest;
 use NishangSystems\Passkeys\Http\Resources\PasskeyResource;
 use NishangSystems\Passkeys\Models\Passkey;
 use NishangSystems\Passkeys\Services\PasskeyService;
+use NishangSystems\Passkeys\Traits\Loggable;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Webauthn\Exception\InvalidDataException;
 
 class PasskeyController
 {
+    use Loggable;
     use RespondsWithJson;
 
     private PasskeyService $passkeyService;
@@ -55,6 +57,8 @@ class PasskeyController
                 'session_id' => $sessionId,
             ]);
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
@@ -98,6 +102,8 @@ class PasskeyController
                 'session_id' => $sessionId,
             ]);
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
@@ -147,8 +153,12 @@ class PasskeyController
 
             return $this->success($responseData, __('passkeys.login_successful'));
         } catch (PasskeyException $e) {
+            $this->error($e->getMessage());
+
             return $this->failure($e->getMessage(), 400);
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
@@ -192,6 +202,8 @@ class PasskeyController
 
             return $this->success(message: __('passkeys.created'));
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
@@ -206,6 +218,8 @@ class PasskeyController
                 __('passkeys.loaded')
             );
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
@@ -223,6 +237,8 @@ class PasskeyController
 
             return $this->success(statusCode: 204);
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+
             return $this->failure(__('passkeys.something_went_wrong'), 500);
         }
     }
