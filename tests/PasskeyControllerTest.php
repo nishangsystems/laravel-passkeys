@@ -82,4 +82,27 @@ class PasskeyControllerTest extends TestCase
         $response = $this->getJson('/passkeys');
         $response->assertStatus(401);
     }
+
+    public function test_user_can_be_resolved_via_custom_get_authenticated_user_callback(): void
+    {
+        $customUser = TestUser::create([
+            'name' => 'Custom User',
+            'email' => 'custom@example.com',
+        ]);
+
+        $customUser->passkeys()->create([
+            'name' => 'Custom Key',
+            'credential_id' => 'cred_custom',
+            'data' => json_encode(['data' => 'custom']),
+        ]);
+
+        config(['passkeys.get_authenticated_user' => fn () => $customUser]);
+
+        $response = $this->actingAs($this->user)->getJson('/passkeys');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data.passkeys');
+
+        $this->assertSame('Custom Key', $response->json('data.passkeys.0.name'));
+    }
 }

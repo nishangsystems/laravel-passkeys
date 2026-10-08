@@ -92,6 +92,14 @@ You can prevent disabled or terminated users from logging in by setting a callab
 'user_active_check' => 'isActive',
 ```
 
+### Get Authenticatd User
+
+If your app has a different way from getting the authenticated user, you can configure it in the `get_authenticated_user` config. By default, the package uses `$request->user()` to get the authenticated user
+
+```php
+'get_authenticated_user' => fn ($request) => Auth('student_api')->user(),
+```
+
 ### Custom routes
 
 Disable package routes and register your own:

@@ -105,4 +105,5 @@ return [
     |
     */
     'user_active_check' => null,
+    'get_authenticated_user' => null
 ];

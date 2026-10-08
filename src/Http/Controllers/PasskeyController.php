@@ -38,12 +38,12 @@ class PasskeyController
     public function registerOptions(GetPasskeyRegisterOptionsRequest $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = $this->getAuthenticatedUser($request);
             $displayName = $user->name ?? $user->email;
             $identifier = $user->getKey();
 
             $options = $this->passkeyService->getRegistrationOptions(
-                (string) $identifier,
+                (string)$identifier,
                 $user->{config('passkeys.user_lookup_field', 'email')},
                 $displayName
             );
@@ -92,7 +92,7 @@ class PasskeyController
                 $sessionId,
                 json_encode([
                     'options' => $options,
-                    'userHandle' => $userId !== null ? (string) $userId : null,
+                    'userHandle' => $userId !== null ? (string)$userId : null,
                 ]),
                 now()->addMinutes(5)
             );
@@ -183,7 +183,8 @@ class PasskeyController
                 $request->getHost()
             );
 
-            $user = $request->user();
+            $user = $this->getAuthenticatedUser($request);
+
             $credentialId = $this->passkeyService->getCredentialId($publicKeyCredentialSource);
 
             $exists = $user->passkeys()
@@ -211,7 +212,9 @@ class PasskeyController
     public function index(Request $request): JsonResponse
     {
         try {
-            $passkeys = $request->user()->passkeys;
+            $user = $this->getAuthenticatedUser($request);
+
+            $passkeys = $user->passkeys;
 
             return $this->success(
                 ['passkeys' => PasskeyResource::collection($passkeys)],
@@ -227,7 +230,9 @@ class PasskeyController
     public function destroy(Request $request, $passkeyId): JsonResponse
     {
         try {
-            $passkey = $request->user()->passkeys()->find($passkeyId);
+            $user = $this->getAuthenticatedUser($request);
+
+            $passkey = $user->passkeys()->find($passkeyId);
 
             if (!$passkey) {
                 return $this->failure(__('passkeys.not_found'), 404);
@@ -256,5 +261,16 @@ class PasskeyController
         }
 
         return true;
+    }
+
+    private function getAuthenticatedUser(Request $request)
+    {
+        $check = config('passkeys.get_authenticated_user');
+
+        if (is_callable($check)) {
+            return $check($request);
+        }
+
+        return $request->user();
     }
 }
