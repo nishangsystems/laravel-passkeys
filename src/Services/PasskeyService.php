@@ -24,6 +24,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
 class PasskeyService
 {
     use Loggable;
+
     private function getRpId(): ?string
     {
         $configured = config('passkeys.rp_id');
@@ -200,7 +201,9 @@ class PasskeyService
      */
     private function allowedOrigins(): array
     {
-        return config('passkeys.allowed_origins', []);
+        $origins = config('passkeys.allowed_origins', []);
+        $origins[] = $this->getRpId();
+        return $origins;
     }
 
     private function base64urlEncode(string $data): string
