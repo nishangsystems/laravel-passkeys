@@ -5,6 +5,7 @@ namespace NishangSystems\Passkeys\Services;
 use Illuminate\Support\Str;
 use NishangSystems\Passkeys\Exceptions\PasskeyException;
 use NishangSystems\Passkeys\Models\Passkey;
+use NishangSystems\Passkeys\Traits\Loggable;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
@@ -22,6 +23,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
 
 class PasskeyService
 {
+    use Loggable;
     private function getRpId(): ?string
     {
         $configured = config('passkeys.rp_id');
@@ -135,6 +137,7 @@ class PasskeyService
                 userHandle: $userHandle,
             );
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
             throw new PasskeyException(__('passkeys.invalid_passkey'), 400);
         }
 
@@ -179,6 +182,7 @@ class PasskeyService
                 host: $host,
             );
         } catch (\Throwable $e) {
+            $this->error($e->getMessage());
             throw new PasskeyException(__('passkeys.registration_failed'), 400);
         }
 
