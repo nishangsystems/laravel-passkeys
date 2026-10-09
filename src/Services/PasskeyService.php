@@ -182,6 +182,7 @@ class PasskeyService
                 host: $host,
             );
         } catch (\Throwable $e) {
+            $this->error("Host $host");
             $this->error($e->getMessage());
             throw new PasskeyException(__('passkeys.registration_failed'), 400);
         }
