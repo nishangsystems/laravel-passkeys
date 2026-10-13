@@ -143,12 +143,16 @@ class PasskeyController
             if (!$this->userCanAuthenticate($user)) {
                 return $this->failure(__('passkeys.invalid_credentials'), 401);
             }
-            $responseData = ['user' => $user];
+            if (config('passkeys.response_formatter') && is_callable(config('passkeys.response_formatter'))) {
+                $responseData = config('passkeys.response_formatter')($request, $user);
+            } else {
+                $responseData = ['user' => $user];
 
-            if (method_exists($user, 'createToken')) {
-                $token = $user->createToken('passkey-auth');
-                $responseData['token'] = $token->accessToken ?? $token->plainTextToken;
-                $responseData['token_type'] = 'Bearer';
+                if (method_exists($user, 'createToken')) {
+                    $token = $user->createToken('passkey-auth');
+                    $responseData['token'] = $token->accessToken ?? $token->plainTextToken;
+                    $responseData['token_type'] = 'Bearer';
+                }
             }
 
             return $this->success($responseData, __('passkeys.login_successful'));

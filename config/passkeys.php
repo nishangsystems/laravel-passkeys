@@ -105,5 +105,6 @@ return [
     |
     */
     'user_active_check' => null,
-    'get_authenticated_user' => null
+    'get_authenticated_user' => null,
+    'response_formatter' => null
 ];
